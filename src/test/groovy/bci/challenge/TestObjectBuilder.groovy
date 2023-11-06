@@ -1,6 +1,5 @@
 package bci.challenge
 
-import bci.challenge.exception.BadRequestException
 import bci.challenge.model.dto.Error
 import bci.challenge.model.dto.ErrorResponseDto
 import bci.challenge.model.dto.PhoneDto
@@ -9,9 +8,6 @@ import bci.challenge.model.entity.Phone
 import bci.challenge.model.entity.User
 import bci.challenge.model.mapper.PhoneMapper
 import org.springframework.http.HttpStatus
-import org.springframework.validation.BeanPropertyBindingResult
-import org.springframework.validation.Errors
-import org.springframework.validation.ObjectError
 
 import java.sql.Timestamp
 import java.time.LocalDateTime
@@ -65,11 +61,5 @@ class TestObjectBuilder {
         user.setToken("aNewToken")
         user.setLastLogin(LocalDateTime.now())
         return user
-    }
-
-    static ErrorResponseDto buildErrorDto() {
-        Error error = new Error(new Timestamp(System.currentTimeMillis()), HttpStatus.BAD_REQUEST.value(), "aMessage")
-        List<Error> errorList = Collections.singletonList(error)
-        return new ErrorResponseDto(errorList)
     }
 }

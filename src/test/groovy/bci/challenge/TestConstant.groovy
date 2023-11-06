@@ -1,6 +1,5 @@
 package bci.challenge
 
-import java.sql.Timestamp
 import java.time.LocalDateTime
 
 class TestConstant {

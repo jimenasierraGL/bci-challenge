@@ -1,8 +1,6 @@
 package bci.challenge.controller
 
-import bci.challenge.TestConstant
 import bci.challenge.TestObjectBuilder
-import bci.challenge.exception.ApiException
 import bci.challenge.exception.BadRequestException
 import bci.challenge.exception.NotFoundException
 import bci.challenge.model.dto.ErrorResponseDto
