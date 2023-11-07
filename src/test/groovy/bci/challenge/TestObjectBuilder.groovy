@@ -49,7 +49,7 @@ class TestObjectBuilder {
         user.setId(UUID.randomUUID())
         return user
     }
-    
+
     static User buildUserWithNewToken() {
         User user = buildUserFromDataBase()
         user.setToken("aNewToken")
