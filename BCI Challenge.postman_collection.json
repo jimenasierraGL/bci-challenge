@@ -36,9 +36,6 @@
 		},
 		{
 			"name": "[Get] User",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
 			"request": {
 				"auth": {
 					"type": "bearer",
@@ -52,15 +49,6 @@
 				},
 				"method": "GET",
 				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"name\": \"Jime Sierra\",\n    \"email\": \"mjimesierra@gmail.com\",\n    \"password\": \"asdasd\",\n    \"phones\": [\n        {\n            \"number\": 3515408603,\n            \"cityCode\": 54,\n            \"countryCode\": \"ARG\"\n        }\n    ]\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
 				"url": {
 					"raw": "http://localhost:8080/user",
 					"protocol": "http",

@@ -25,8 +25,8 @@ public class UserDto {
     private String email;
     @NotNull
     @Pattern(regexp = "(?=[a-zA-Z0-9]{8,12}$)(?=[^A-Z]*[A-Z][^A-Z]*$)(^(?:\\D*\\d){2}\\D*$)",
-    message = "Password must have only one capital letter and only two numbers (not necessarily\n" +
-            "consecutive), in combination of lowercase letters, maximum length of 12 and minimum 8.")
+    message = "Password must have only one capital letter and only two numbers (not necessarily consecutive), in " +
+            "combination of lowercase letters, maximum length of 12 and minimum 8.")
     private String password;
     private String token;
     private List<PhoneDto> phones;
