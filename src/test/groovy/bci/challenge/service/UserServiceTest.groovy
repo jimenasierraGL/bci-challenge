@@ -28,7 +28,7 @@ class UserServiceTest extends Specification{
 
     }
 
-    def "should create an user successfully"(){
+    def "Should create an user successfully"(){
 
         given: "An user from dto input"
         UserDto userDto = TestObjectBuilder.buildUserDto()
@@ -53,7 +53,7 @@ class UserServiceTest extends Specification{
         newUser.getLastLogin() == LOCAL_DATE_TIME_NOW
     }
 
-    def "should throw BadRequestException for duplicate user"() {
+    def "Should throw BadRequestException for duplicate user"() {
 
         given: "An user from dto input"
         UserDto userDto = TestObjectBuilder.buildUserDto()
@@ -62,14 +62,14 @@ class UserServiceTest extends Specification{
         userService.createUser(userDto)
 
 
-        then: "Saves and return the user"
+        then: "Throws BadRequestException because user is duplicated"
         1 * userRepository.findByEmail(userDto.getEmail()) >> Optional.of(new User())
         ApiException exception = thrown(ApiException)
         exception.getMessage() == "User " + userDto.getEmail() + " already exists"
         exception.getHttpStatus() == HttpStatus.BAD_REQUEST
     }
 
-    def "should return an user from data base"() {
+    def "Should return an user from data base"() {
         given: "A JWT token"
         String token = TOKEN
         User jwtUser = TestObjectBuilder.buildUser()
@@ -89,7 +89,7 @@ class UserServiceTest extends Specification{
 
 
 
-    def "should throw NotFoundException"() {
+    def "Should throw NotFoundException"() {
         given: "A JWT token"
         String token = TOKEN
 

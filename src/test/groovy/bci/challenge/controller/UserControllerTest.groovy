@@ -9,8 +9,11 @@ import bci.challenge.model.mapper.UserMapper
 import bci.challenge.service.UserService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.mock.web.MockHttpServletRequest
 import org.springframework.validation.BeanPropertyBindingResult
 import spock.lang.Specification
+
+import javax.servlet.http.HttpServletRequest
 
 import static bci.challenge.TestConstant.*;
 
@@ -26,30 +29,30 @@ class UserControllerTest extends Specification {
         userFromDB = UserMapper.INSTANCE.mapUserToUserDto(TestObjectBuilder.buildUserFromDataBase())
     }
 
-    def "should post an User with HttpStatus.CREATED"() {
-        given: "an userDto and Errors"
+    def "Should post an User with HttpStatus.CREATED"() {
+        given: "An userDto and Errors"
         UserDto userDto = TestObjectBuilder.buildUserDto()
         BeanPropertyBindingResult error = new BeanPropertyBindingResult(userDto, "userDto")
 
-        when: "post user"
+        when: "Post user"
         ResponseEntity responseEntity = userController.postUser(userDto, error)
 
-        then: "return an User"
+        then: "Return an User"
         1 * userService.createUser(userDto) >> userFromDB
 
         responseEntity.getStatusCode() == HttpStatus.CREATED
         responseEntity.getBody() == userFromDB
     }
 
-    def "should handle an ApiException and return an ErrorResponseDto with HttpStatus.BAD_REQUEST"() {
+    def "Should handle an ApiException and return an ErrorResponseDto with HttpStatus.BAD_REQUEST"() {
         given: "an userDto and Errors"
         UserDto userDto = TestObjectBuilder.buildUserDto()
         BeanPropertyBindingResult error = new BeanPropertyBindingResult(userDto, "userDto")
 
-        when: "post user"
+        when: "Post user"
         ResponseEntity responseEntity = userController.postUser(userDto, error)
 
-        then: "return an ErrorResponseDto"
+        then: "Return an ErrorResponseDto"
         1 * userService.createUser(userDto) >> { throw new BadRequestException(MESSAGE)}
         responseEntity.getStatusCode() == HttpStatus.BAD_REQUEST
         ErrorResponseDto.cast(responseEntity.getBody()).getError().every {
@@ -57,29 +60,31 @@ class UserControllerTest extends Specification {
             it.getDetail() == MESSAGE}
     }
 
-    def "should return an User from a JWToken with HttpStatus.OK"() {
-        given: "a JWToken"
-        String token = TOKEN
+    def "Should return an User from a JWToken with HttpStatus.OK"() {
+        given: "A HttpServletRequest"
+        HttpServletRequest request = new MockHttpServletRequest()
+        request.setParameter("Authorization", TOKEN)
 
-        when: "gets an user"
-        ResponseEntity responseEntity = userController.getUser(token)
+        when: "Gets an user"
+        ResponseEntity responseEntity = userController.getUser(request)
 
-        then: "return an User"
-        1 * userService.getUser(token) >> userFromDB
+        then: "Return an User"
+        1 * userService.getUser(_) >> userFromDB
 
         responseEntity.getStatusCode() == HttpStatus.OK
         responseEntity.getBody() == userFromDB
     }
 
-    def "should handle an ApiException and return an ErrorResponseDto with HttpStatus.NOT_FOUND"() {
-        given: "a JWToken"
-        String token = TOKEN
+    def "Should handle an ApiException and return an ErrorResponseDto with HttpStatus.NOT_FOUND"() {
+        given: "A HttpServletRequest"
+        HttpServletRequest request = new MockHttpServletRequest()
+        request.setParameter("Authorization", TOKEN)
 
-        when: "gets an user"
-        ResponseEntity responseEntity = userController.getUser(token)
+        when: "Gets an user"
+        ResponseEntity responseEntity = userController.getUser(request)
 
-        then: "return an ErrorResponseDto"
-        1 * userService.getUser(token) >> { throw new NotFoundException(MESSAGE)}
+        then: "Return an ErrorResponseDto"
+        1 * userService.getUser(_) >> { throw new NotFoundException(MESSAGE)}
         responseEntity.getStatusCode() == HttpStatus.NOT_FOUND
         ErrorResponseDto.cast(responseEntity.getBody()).getError().every {
             it.getCode() == responseEntity.getStatusCode().value() &&
