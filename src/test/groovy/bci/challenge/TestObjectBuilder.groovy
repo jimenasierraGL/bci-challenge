@@ -1,15 +1,10 @@
 package bci.challenge
 
-import bci.challenge.model.dto.Error
-import bci.challenge.model.dto.ErrorResponseDto
 import bci.challenge.model.dto.PhoneDto
 import bci.challenge.model.dto.UserDto
 import bci.challenge.model.entity.Phone
 import bci.challenge.model.entity.User
 import bci.challenge.model.mapper.PhoneMapper
-import org.springframework.http.HttpStatus
-
-import java.sql.Timestamp
 import java.time.LocalDateTime
 
 import static bci.challenge.TestConstant.*
@@ -54,8 +49,7 @@ class TestObjectBuilder {
         user.setId(UUID.randomUUID())
         return user
     }
-
-
+    
     static User buildUserWithNewToken() {
         User user = buildUserFromDataBase()
         user.setToken("aNewToken")

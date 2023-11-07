@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 @RestController
@@ -35,7 +36,8 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity getUser(@RequestParam String token) {
+    public ResponseEntity getUser(HttpServletRequest request) {
+        String token = request.getHeader("Authorization");
 
         log.info("Incoming request: GET User {}", token);
         try {
