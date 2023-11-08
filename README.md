@@ -3,8 +3,11 @@ Author: Maria Jimena Sierra
 
 ## Deployment
 
-To deploy this project with Docker open a terminal on the proyect folder and run
-
+First we have to generate the .Jar file:
+```bash
+  gradle build
+```
+Then, to deploy this project with Docker open a terminal on the project folder and run
 ```bash
   docker-compose up -d
 ```

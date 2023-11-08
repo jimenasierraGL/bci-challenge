@@ -3,6 +3,7 @@ package bci.challenge.model.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
+import lombok.ToString;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -27,7 +28,9 @@ public class UserDto {
     @Pattern(regexp = "(?=[a-zA-Z0-9]{8,12}$)(?=[^A-Z]*[A-Z][^A-Z]*$)(^(?:\\D*\\d){2}\\D*$)",
     message = "Password must have only one capital letter and only two numbers (not necessarily consecutive), in " +
             "combination of lowercase letters, maximum length of 12 and minimum 8.")
+    @ToString.Exclude
     private String password;
+    @ToString.Exclude
     private String token;
     private List<PhoneDto> phones;
 }

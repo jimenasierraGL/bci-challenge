@@ -42,8 +42,6 @@ dependencies {
     testImplementation 'org.spockframework:spock-core:2.3-groovy-3.0'
 }
 
-
-
 group = 'bci'
 version = '0.0.1-SNAPSHOT'
 description = 'challenge'

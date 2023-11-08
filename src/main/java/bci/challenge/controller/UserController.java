@@ -39,7 +39,7 @@ public class UserController {
     public ResponseEntity getUser(HttpServletRequest request) {
         String token = request.getHeader("Authorization");
 
-        log.info("Incoming request: GET User {}", token);
+        log.info("Incoming request: GET User");
         try {
             return new ResponseEntity<>(userService.getUser(token), HttpStatus.OK);
         } catch (ApiException exception) {
