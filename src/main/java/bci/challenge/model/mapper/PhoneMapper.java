@@ -11,6 +11,5 @@ import java.util.List;
 public interface PhoneMapper {
 
     PhoneMapper INSTANCE = Mappers.getMapper(PhoneMapper.class);
-    Phone mapPhoneDtoToPhone(PhoneDto phone);
     List<Phone> mapPhoneDtoListToPhoneList(List<PhoneDto> phone);
 }

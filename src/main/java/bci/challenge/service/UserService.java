@@ -52,8 +52,7 @@ public class UserService {
             return UserMapper.INSTANCE.mapUserToUserDto(userRepository.save(newUser));
         } catch (BadRequestException | JWTException exception) {
             throw new ApiException(exception.getMessage(), exception.getHttpStatus());
-        }
-        catch (Exception exception) {
+        } catch (Exception exception) {
             throw new ApiException(exception.getMessage());
         }
     }
