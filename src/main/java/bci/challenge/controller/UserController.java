@@ -23,7 +23,7 @@ public class UserController {
 
     private final UserService userService;
 
-    @PostMapping
+    @PostMapping("/sign-up")
     public ResponseEntity postUser(@Valid @RequestBody UserDto user, Errors error) {
         log.info("Incoming request: POST User {}", user);
         try {
@@ -35,7 +35,7 @@ public class UserController {
         }
     }
 
-    @GetMapping
+    @GetMapping("/login")
     public ResponseEntity getUser(HttpServletRequest request) {
         String token = request.getHeader("Authorization");
 

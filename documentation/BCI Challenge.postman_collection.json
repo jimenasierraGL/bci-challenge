@@ -1,0 +1,72 @@
+{
+	"info": {
+		"_postman_id": "07d958d8-bd12-42c9-8bae-96225b4e2cf6",
+		"name": "BCI Challenge",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "30887773"
+	},
+	"item": [
+		{
+			"name": "[Post] User",
+			"request": {
+				"auth": {
+					"type": "apikey"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Jime Sierra\",\n    \"email\": \"jimesierra@email.com\",\n    \"password\": \"Contrasena12\",\n    \"phones\": [\n        {\n            \"number\": 155112233,\n            \"cityCode\": 351,\n            \"countryCode\": \"54\"\n        }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/user/sign-up",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user",
+						"sign-up"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[Get] User",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJpZCI6bnVsbCwiY3JlYXRlZCI6WzIwMjMsMTEsMTYsMTEsMTgsMzIsODkxMDAwMDAwXSwibGFzdExvZ2luIjpbMjAyMywxMSwxNiwxMSwxOCwzMiw4OTEwMDAwMDBdLCJpc0FjdGl2ZSI6dHJ1ZSwibmFtZSI6IkppbWUgU2llcnJhIiwiZW1haWwiOiJqaW1lc2llcnJhQGVtYWlsLmNvbSIsInBhc3N3b3JkIjoiJDJhJDEwJFhNaExMSUFvcmlybzg4S2RpcGpuN3VYalliS2VPYlZ4cW1zMUNCQ2d5OHB3cUZtUG81OUZLIiwidG9rZW4iOm51bGwsInBob25lcyI6W3siaWQiOm51bGwsIm51bWJlciI6MTU1MTEyMjMzLCJjaXR5Q29kZSI6MzUxLCJjb3VudHJ5Q29kZSI6IjU0In1dfQ.1hB7ehfbrwEc9MUWflbloX4nyGgETdUVx-5wAgwkAyQ",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/user/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user",
+						"login"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

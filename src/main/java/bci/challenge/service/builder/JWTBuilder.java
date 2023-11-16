@@ -49,6 +49,9 @@ public class JWTBuilder {
 
     public User getUserFromJWT(String token) {
         try {
+            if (token == null || token.isEmpty()) {
+                throw new JWTException("Token must not be null");
+            }
             String[] split_string = token.split("\\.");
             String base64EncodedBody = split_string[1];
             Base64 base64Url = new Base64(true);
