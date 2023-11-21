@@ -27,8 +27,6 @@ public class User {
     private String email;
     @Column(length = 1024)
     private String password;
-    @Column(columnDefinition = "text")
-    private String token;
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Phone> phones;
 

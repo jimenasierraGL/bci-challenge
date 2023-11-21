@@ -46,10 +46,11 @@ public class UserService {
                     .build();
             buildPhones(user.getPhones(), newUser);
 
+            newUser = userRepository.save(newUser);
+            UserDto userDto = UserMapper.INSTANCE.mapUserToUserDto(newUser);
             String token = jwtBuilder.createToken(newUser);
-            newUser.setToken(token);
-
-            return UserMapper.INSTANCE.mapUserToUserDto(userRepository.save(newUser));
+            userDto.setToken(token);
+            return userDto;
         } catch (BadRequestException | JWTException exception) {
             throw new ApiException(exception.getMessage(), exception.getHttpStatus());
         } catch (Exception exception) {
@@ -68,14 +69,16 @@ public class UserService {
 
             User userFromJWT = jwtBuilder.getUserFromJWT(token);
 
-            User user = userRepository.findByIdOrEmail(userFromJWT.getId(), userFromJWT.getEmail())
+            User user = userRepository.findById(userFromJWT.getId())
                     .orElseThrow(() -> new NotFoundException("User not found"));
 
-            String newToken = jwtBuilder.createToken(user);
             user.setLastLogin(LocalDateTime.now());
-            user.setToken(newToken);
+            user = userRepository.save(user);
 
-            return UserMapper.INSTANCE.mapUserToUserDto(userRepository.save(user));
+            String newToken = jwtBuilder.createToken(user);
+            UserDto userDto = UserMapper.INSTANCE.mapUserToUserDto(user);
+            userDto.setToken(newToken);
+            return userDto;
         } catch (NotFoundException | JWTException exception) {
             throw new ApiException(exception.getMessage(), exception.getHttpStatus());
         }
