@@ -1,8 +1,6 @@
 package bci.challenge.service;
 
-import bci.challenge.exception.ApiException;
 import bci.challenge.exception.BadRequestException;
-import bci.challenge.exception.JWTException;
 import bci.challenge.exception.NotFoundException;
 import bci.challenge.model.dto.PhoneDto;
 import bci.challenge.model.dto.UserDto;
@@ -30,32 +28,27 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     @Transactional(rollbackOn = Exception.class)
     public UserDto createUser(UserDto user) {
-        try {
-            Optional<User> userOpt = userRepository.findByEmail(user.getEmail());
-            if (userOpt.isPresent()) {
-                throw new BadRequestException("User " + user.getEmail() + " already exists");
-            }
 
-            User newUser = User.builder()
-                    .name(user.getName())
-                    .email(user.getEmail())
-                    .password(passwordEncoder.encode(user.getPassword()))
-                    .created(LocalDateTime.now())
-                    .lastLogin(LocalDateTime.now())
-                    .isActive(true)
-                    .build();
-            buildPhones(user.getPhones(), newUser);
-
-            newUser = userRepository.save(newUser);
-            UserDto userDto = UserMapper.INSTANCE.mapUserToUserDto(newUser);
-            String token = jwtBuilder.createToken(newUser);
-            userDto.setToken(token);
-            return userDto;
-        } catch (BadRequestException | JWTException exception) {
-            throw new ApiException(exception.getMessage(), exception.getHttpStatus());
-        } catch (Exception exception) {
-            throw new ApiException(exception.getMessage());
+        Optional<User> userOpt = userRepository.findByEmail(user.getEmail());
+        if (userOpt.isPresent()) {
+            throw new BadRequestException("User " + user.getEmail() + " already exists");
         }
+
+        User newUser = User.builder()
+                .name(user.getName())
+                .email(user.getEmail())
+                .password(passwordEncoder.encode(user.getPassword()))
+                .created(LocalDateTime.now())
+                .lastLogin(LocalDateTime.now())
+                .isActive(true)
+                .build();
+        buildPhones(user.getPhones(), newUser);
+
+        newUser = userRepository.save(newUser);
+        UserDto userDto = UserMapper.INSTANCE.mapUserToUserDto(newUser);
+        String token = jwtBuilder.createToken(newUser);
+        userDto.setToken(token);
+        return userDto;
     }
 
     private void buildPhones(List<PhoneDto> phones, User newUser) {
@@ -65,25 +58,18 @@ public class UserService {
     }
 
     public UserDto getUser(String token) {
-        try {
 
-            User userFromJWT = jwtBuilder.getUserFromJWT(token);
+        User userFromJWT = jwtBuilder.getUserFromJWT(token);
 
-            User user = userRepository.findById(userFromJWT.getId())
-                    .orElseThrow(() -> new NotFoundException("User not found"));
+        User user = userRepository.findById(userFromJWT.getId())
+                .orElseThrow(() -> new NotFoundException("User not found"));
 
-            user.setLastLogin(LocalDateTime.now());
-            user = userRepository.save(user);
+        user.setLastLogin(LocalDateTime.now());
+        user = userRepository.save(user);
 
-            String newToken = jwtBuilder.createToken(user);
-            UserDto userDto = UserMapper.INSTANCE.mapUserToUserDto(user);
-            userDto.setToken(newToken);
-            return userDto;
-        } catch (NotFoundException | JWTException exception) {
-            throw new ApiException(exception.getMessage(), exception.getHttpStatus());
-        }
-        catch (Exception exception) {
-            throw new ApiException(exception.getMessage());
-        }
+        String newToken = jwtBuilder.createToken(user);
+        UserDto userDto = UserMapper.INSTANCE.mapUserToUserDto(user);
+        userDto.setToken(newToken);
+        return userDto;
     }
 }

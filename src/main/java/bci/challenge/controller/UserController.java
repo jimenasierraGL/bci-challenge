@@ -24,27 +24,16 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/sign-up")
-    public ResponseEntity postUser(@Valid @RequestBody UserDto user, Errors error) {
+    public ResponseEntity<UserDto> postUser(@Valid @RequestBody UserDto user, Errors error) {
         log.info("Incoming request: POST User {}", user);
-        try {
-            ErrorProcessor.processErrors(error);
-            return new ResponseEntity<>(userService.createUser(user), HttpStatus.CREATED);
-        } catch (ApiException exception) {
-            ErrorResponseDto errors = new ErrorResponseDto(exception.getErrors());
-            return new ResponseEntity<>(errors, exception.getHttpStatus());
-        }
+        ErrorProcessor.processErrors(error);
+        return new ResponseEntity<>(userService.createUser(user), HttpStatus.CREATED);
     }
 
     @GetMapping("/login")
-    public ResponseEntity getUser(HttpServletRequest request) {
+    public ResponseEntity<UserDto> getUser(HttpServletRequest request) {
         String token = request.getHeader("Authorization");
-
         log.info("Incoming request: GET User");
-        try {
-            return new ResponseEntity<>(userService.getUser(token), HttpStatus.OK);
-        } catch (ApiException exception) {
-            ErrorResponseDto errors = new ErrorResponseDto(exception.getErrors());
-            return new ResponseEntity<>(errors, exception.getHttpStatus());
-        }
+        return new ResponseEntity<>(userService.getUser(token), HttpStatus.OK);
     }
 }
