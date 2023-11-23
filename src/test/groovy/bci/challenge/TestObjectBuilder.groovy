@@ -39,7 +39,6 @@ class TestObjectBuilder {
         user.setIsActive(true)
         user.setCreated(LOCAL_DATE_TIME_NOW)
         user.setLastLogin(LOCAL_DATE_TIME_NOW)
-        user.setToken(TOKEN)
         user.setPhones(buildPhoneList())
         return user
     }
@@ -52,7 +51,6 @@ class TestObjectBuilder {
 
     static User buildUserWithNewToken() {
         User user = buildUserFromDataBase()
-        user.setToken("aNewToken")
         user.setLastLogin(LocalDateTime.now())
         return user
     }

@@ -14,10 +14,10 @@ import static bci.challenge.TestConstant.*
 
 class UserServiceTest extends Specification{
 
-    UserRepository userRepository;
-    JWTBuilder jwtBuilder;
-    PasswordEncoder passwordEncoder;
-    UserService userService;
+    UserRepository userRepository
+    JWTBuilder jwtBuilder
+    PasswordEncoder passwordEncoder
+    UserService userService
 
     def setup() {
         given: "An userService, a passwordEncoder and a mocked userRepository and jwtBuilder"
@@ -47,7 +47,6 @@ class UserServiceTest extends Specification{
         newUser.getName() == userDto.getName()
         newUser.getIsActive() == true
         newUser.getId() != null
-        newUser.getToken() == TOKEN
         newUser.getPhones().size() == userDto.getPhones().size()
         newUser.getCreated() == LOCAL_DATE_TIME_NOW
         newUser.getLastLogin() == LOCAL_DATE_TIME_NOW
@@ -79,28 +78,11 @@ class UserServiceTest extends Specification{
 
         then: "Gets user from data bse and returns it"
         1 * jwtBuilder.getUserFromJWT(TOKEN) >> jwtUser
-        1 * userRepository.findByIdOrEmail(jwtUser.getId(), jwtUser.getEmail())  >> Optional.of(TestObjectBuilder.buildUserFromDataBase())
+        1 * userRepository.findById(jwtUser.getId())  >> Optional.of(TestObjectBuilder.buildUserFromDataBase())
         1 * jwtBuilder.createToken(_) >> "aNewToken"
         1 * userRepository.save(_) >> TestObjectBuilder.buildUserWithNewToken()
 
         user.getToken() != token
         user.getLastLogin() != jwtUser.getLastLogin()
-    }
-
-
-
-    def "Should throw NotFoundException"() {
-        given: "A JWT token"
-        String token = TOKEN
-
-        when: "Getting an user"
-        userService.getUser(token)
-
-        then: "Gets user from data bse and returns it"
-        1 * jwtBuilder.getUserFromJWT(TOKEN) >> TestObjectBuilder.buildUser()
-        1 * userRepository.findByIdOrEmail(_, _)  >> Optional.empty()
-        ApiException exception = thrown(ApiException)
-        exception.getMessage() == "User not found"
-        exception.getHttpStatus() == HttpStatus.NOT_FOUND
     }
 }

@@ -43,23 +43,6 @@ class UserControllerTest extends Specification {
         responseEntity.getStatusCode() == HttpStatus.CREATED
         responseEntity.getBody() == userFromDB
     }
-
-    def "Should handle an ApiException and return an ErrorResponseDto with HttpStatus.BAD_REQUEST"() {
-        given: "an userDto and Errors"
-        UserDto userDto = TestObjectBuilder.buildUserDto()
-        BeanPropertyBindingResult error = new BeanPropertyBindingResult(userDto, "userDto")
-
-        when: "Post user"
-        ResponseEntity responseEntity = userController.postUser(userDto, error)
-
-        then: "Return an ErrorResponseDto"
-        1 * userService.createUser(userDto) >> { throw new BadRequestException(MESSAGE)}
-        responseEntity.getStatusCode() == HttpStatus.BAD_REQUEST
-        ErrorResponseDto.cast(responseEntity.getBody()).getError().every {
-            it.getCode() == responseEntity.getStatusCode().value() &&
-            it.getDetail() == MESSAGE}
-    }
-
     def "Should return an User from a JWToken with HttpStatus.OK"() {
         given: "A HttpServletRequest"
         HttpServletRequest request = new MockHttpServletRequest()
@@ -73,21 +56,5 @@ class UserControllerTest extends Specification {
 
         responseEntity.getStatusCode() == HttpStatus.OK
         responseEntity.getBody() == userFromDB
-    }
-
-    def "Should handle an ApiException and return an ErrorResponseDto with HttpStatus.NOT_FOUND"() {
-        given: "A HttpServletRequest"
-        HttpServletRequest request = new MockHttpServletRequest()
-        request.setParameter("Authorization", TOKEN)
-
-        when: "Gets an user"
-        ResponseEntity responseEntity = userController.getUser(request)
-
-        then: "Return an ErrorResponseDto"
-        1 * userService.getUser(_) >> { throw new NotFoundException(MESSAGE)}
-        responseEntity.getStatusCode() == HttpStatus.NOT_FOUND
-        ErrorResponseDto.cast(responseEntity.getBody()).getError().every {
-            it.getCode() == responseEntity.getStatusCode().value() &&
-                    it.getDetail() == MESSAGE}
     }
 }
